@@ -43,6 +43,10 @@ public class OutputView {
         System.out.printf(TOTAL_GAME_COUNT.getMessage(), gameResult.getTryCount());
     }
 
+    public void printExceptionMessage(String message) {
+        System.out.println(message);
+    }
+
     private void printOutputMessage(OutputMessage outputMessage) {
         System.out.println(outputMessage.getMessage());
     }

@@ -1,6 +1,7 @@
 package bridge.controller;
 
 import bridge.BridgeRandomNumberGenerator;
+import bridge.handler.ExceptionRetryHandler;
 import bridge.model.Bridge;
 import bridge.model.BridgeGame;
 import bridge.model.BridgeMaker;
@@ -13,24 +14,27 @@ import bridge.view.OutputView;
 public class BridgeGameController {
     private final InputView inputView;
     private final OutputView outputView;
+    private final ExceptionRetryHandler retryHandler;
 
-    public BridgeGameController(InputView inputView, OutputView outputView) {
+    public BridgeGameController(InputView inputView, OutputView outputView, ExceptionRetryHandler retryHandler) {
         this.inputView = inputView;
         this.outputView = outputView;
+        this.retryHandler = retryHandler;
     }
 
     public void run() {
         outputView.printGameIntroduction();
-        BridgeSize bridgeSize = new BridgeSize(inputView.readBridgeSize());
+        BridgeSize bridgeSize = getBridgeSize();
         BridgeMaker bridgeMaker = new BridgeMaker(new BridgeRandomNumberGenerator());
         Bridge bridge = new Bridge(bridgeMaker.makeBridge(bridgeSize.getSize()));
         BridgeGame bridgeGame = new BridgeGame(bridge);
+
         while (bridgeGame.validateGameContinue(bridgeSize)) {
-            MovingSign movingSign = new MovingSign(inputView.readMoving());
+            MovingSign movingSign = getMovingSign();
             bridgeGame.move(movingSign);
             outputView.printMap(bridgeGame);
             if (!bridgeGame.isBridgeValidSign(movingSign)) {
-                GameCommand gameCommand = new GameCommand(inputView.readGameCommand());
+                GameCommand gameCommand = getGameCommand();
                 if (gameCommand.isGameEnd()) {
                     outputView.printResult(bridgeGame);
                     return;
@@ -39,5 +43,17 @@ public class BridgeGameController {
             }
         }
         outputView.printResult(bridgeGame);
+    }
+
+    private BridgeSize getBridgeSize() {
+        return retryHandler.retryUntilValid(() -> new BridgeSize(inputView.readBridgeSize()));
+    }
+
+    private MovingSign getMovingSign() {
+        return retryHandler.retryUntilValid(() -> new MovingSign(inputView.readMoving()));
+    }
+
+    private GameCommand getGameCommand() {
+        return retryHandler.retryUntilValid(() -> new GameCommand(inputView.readGameCommand()));
     }
 }
