@@ -3,6 +3,7 @@ package bridge.controller;
 import bridge.BridgeRandomNumberGenerator;
 import bridge.model.BridgeMaker;
 import bridge.model.BridgeSize;
+import bridge.model.MovingSign;
 import bridge.view.InputView;
 import bridge.view.OutputView;
 
@@ -19,5 +20,6 @@ public class BridgeGameController {
         outputView.printGameIntroduction();
         BridgeSize bridgeSize = new BridgeSize(inputView.readBridgeSize());
         BridgeMaker bridgeMaker = new BridgeMaker(new BridgeRandomNumberGenerator());
+        MovingSign movingSign = new MovingSign(inputView.readMoving());
     }
 }
