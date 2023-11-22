@@ -6,6 +6,7 @@ import bridge.model.Bridge;
 import bridge.model.BridgeGame;
 import bridge.model.BridgeMaker;
 import bridge.model.BridgeSize;
+import bridge.model.CrossPosition;
 import bridge.model.GameCommand;
 import bridge.model.MovingSign;
 import bridge.view.InputView;
@@ -27,13 +28,14 @@ public class BridgeGameController {
         BridgeSize bridgeSize = getBridgeSize();
         BridgeMaker bridgeMaker = new BridgeMaker(new BridgeRandomNumberGenerator());
         Bridge bridge = new Bridge(bridgeMaker.makeBridge(bridgeSize.getSize()));
-        BridgeGame bridgeGame = new BridgeGame(bridge);
+        BridgeGame bridgeGame = new BridgeGame(bridge, new CrossPosition());
 
-        while (bridgeGame.validateGameContinue(bridgeSize)) {
+        while (bridgeGame.validateGameContinue()) {
             MovingSign movingSign = getMovingSign();
             bridgeGame.move(movingSign);
             outputView.printMap(bridgeGame);
             if (!bridgeGame.isBridgeValidSign(movingSign)) {
+                bridgeGame.plusTryCount();
                 GameCommand gameCommand = getGameCommand();
                 if (gameCommand.isGameEnd()) {
                     outputView.printResult(bridgeGame);

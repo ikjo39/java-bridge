@@ -1,72 +1,52 @@
 package bridge.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BridgeGame {
-    private static final String MOVABLE = "O";
-    private static final String IMMOVABLE = "X";
-    private static final String UNSELECTED = " ";
+    private static final int INIT_INDEX = 0;
+    private static final int INIT_COUNT = 1;
 
     private final Bridge bridge;
-    private final List<String> upperBridge = new ArrayList<>();
-    private final List<String> lowerBridge = new ArrayList<>();
-    private int count;
+    private final CrossPosition crossPosition;
+    private int index;
+    private int tryCount;
 
-    public BridgeGame(Bridge bridge) {
+    public BridgeGame(Bridge bridge, CrossPosition crossPosition) {
         this.bridge = bridge;
-        count = 0;
+        this.crossPosition = crossPosition;
+        index = INIT_INDEX;
+        tryCount = INIT_COUNT;
     }
 
-    public boolean validateGameContinue(BridgeSize bridgeSize) {
-        return count < bridgeSize.getSize();
+    public boolean validateGameContinue() {
+        return index < bridge.getSize();
     }
 
     public void move(MovingSign movingSign) {
-        if (isBridgeValidSign(movingSign) && movingSign.isUpperSign()) {
-            upperBridge.add(MOVABLE);
-            lowerBridge.add(UNSELECTED);
-            count++;
-            return;
-        } else if (isBridgeValidSign(movingSign)) {
-            upperBridge.add(UNSELECTED);
-            lowerBridge.add(MOVABLE);
-            count++;
-            return;
-        } else if (movingSign.isUpperSign()) {
-            upperBridge.add(IMMOVABLE);
-            lowerBridge.add(UNSELECTED);
-            count++;
-            return;
-        }
-        upperBridge.add(UNSELECTED);
-        lowerBridge.add(IMMOVABLE);
-        count++;
+        index++;
+        crossPosition.move(isBridgeValidSign(movingSign), movingSign.isUpperSign());
     }
 
     public boolean isBridgeValidSign(MovingSign movingSign) {
-        return bridge.isBridgeValidSign(count, movingSign.getSign());
+        return bridge.isBridgeValidSign(index - 1, movingSign.getSign());
+    }
+
+    public void plusTryCount() {
+        tryCount++;
     }
 
     public GameResult getGameResult() {
-        return new GameResult(isGameSuccess(), count);
+        return new GameResult(isGameSuccess(), tryCount);
     }
 
     public void retry() {
-        upperBridge.clear();
-        lowerBridge.clear();
-        count = 0;
+        crossPosition.clear();
+        index = INIT_INDEX;
     }
 
     public boolean isGameSuccess() {
-        return bridge.getSize() == upperBridge.size();
+        return bridge.getSize() == crossPosition.getSize();
     }
 
-    public List<String> getUpperBridge() {
-        return upperBridge;
-    }
-
-    public List<String> getLowerBridge() {
-        return lowerBridge;
+    public CrossPosition getCrossPosition() {
+        return crossPosition;
     }
 }
