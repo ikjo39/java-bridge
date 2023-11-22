@@ -31,10 +31,11 @@ public class OutputView {
         System.out.println();
     }
 
-    public void printResult(GameResult gameResult, BridgeGame bridgeGame) {
+    public void printResult(BridgeGame bridgeGame) {
         printOutputMessage(FINAL_RESULT_OF_THE_GAME);
         printMap(bridgeGame);
         String result = FAIL;
+        GameResult gameResult = bridgeGame.getGameResult();
         if (gameResult.isGameSuccess()) {
             result = SUCCESS;
         }

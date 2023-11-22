@@ -12,4 +12,8 @@ public class Bridge {
     public boolean isBridgeValidSign(int index, String sign) {
         return sign.equals(bridge.get(index));
     }
+
+    public int getSize() {
+        return bridge.size();
+    }
 }

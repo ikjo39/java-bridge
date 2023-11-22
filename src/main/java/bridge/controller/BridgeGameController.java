@@ -6,7 +6,6 @@ import bridge.model.BridgeGame;
 import bridge.model.BridgeMaker;
 import bridge.model.BridgeSize;
 import bridge.model.GameCommand;
-import bridge.model.GameResult;
 import bridge.model.MovingSign;
 import bridge.view.InputView;
 import bridge.view.OutputView;
@@ -25,26 +24,20 @@ public class BridgeGameController {
         BridgeSize bridgeSize = new BridgeSize(inputView.readBridgeSize());
         BridgeMaker bridgeMaker = new BridgeMaker(new BridgeRandomNumberGenerator());
         Bridge bridge = new Bridge(bridgeMaker.makeBridge(bridgeSize.getSize()));
-        int count = 0;
         BridgeGame bridgeGame = new BridgeGame(bridge);
-        while (count < bridgeSize.getSize()) {
+        while (bridgeGame.validateGameContinue(bridgeSize)) {
             MovingSign movingSign = new MovingSign(inputView.readMoving());
-            bridgeGame.move(count, movingSign);
+            bridgeGame.move(movingSign);
             outputView.printMap(bridgeGame);
-            if (!bridgeGame.isBridgeValidSign(count, movingSign)) {
+            if (!bridgeGame.isBridgeValidSign(movingSign)) {
                 GameCommand gameCommand = new GameCommand(inputView.readGameCommand());
                 if (gameCommand.isGameEnd()) {
-                    GameResult gameResult = new GameResult(bridgeGame.isGameSuccess(bridgeSize), count);
-                    outputView.printResult(gameResult, bridgeGame);
+                    outputView.printResult(bridgeGame);
                     return;
                 }
                 bridgeGame.retry();
-                count = 0;
-                continue;
             }
-            count++;
         }
-        GameResult gameResult = new GameResult(bridgeGame.isGameSuccess(bridgeSize), count);
-        outputView.printResult(gameResult, bridgeGame);
+        outputView.printResult(bridgeGame);
     }
 }
