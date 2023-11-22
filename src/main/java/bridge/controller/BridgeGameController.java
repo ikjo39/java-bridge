@@ -1,5 +1,6 @@
 package bridge.controller;
 
+import bridge.model.BridgeSize;
 import bridge.view.InputView;
 import bridge.view.OutputView;
 
@@ -14,5 +15,6 @@ public class BridgeGameController {
 
     public void run() {
         outputView.printGameIntroduction();
+        BridgeSize bridgeSize = new BridgeSize(inputView.readBridgeSize());
     }
 }
