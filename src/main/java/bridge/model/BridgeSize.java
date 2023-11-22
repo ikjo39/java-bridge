@@ -22,4 +22,8 @@ public class BridgeSize {
     private boolean isLengthInRange(int size) {
         return size >= MINIMUM_BRIDGE_SIZE && size <= MAXIMUM_BRIDGE_SIZE;
     }
+
+    public int getSize() {
+        return size;
+    }
 }

@@ -24,4 +24,12 @@ public class MovingSign {
             throw new IllegalArgumentException(INVALID_MOVING_SIGN.getMessage());
         }
     }
+
+    public boolean isUpperSign() {
+        return UP_SIGN.equals(sign);
+    }
+
+    public String getSign() {
+        return sign;
+    }
 }
