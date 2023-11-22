@@ -2,29 +2,23 @@ package bridge.view;
 
 import static bridge.constant.ExceptionMessage.INVALID_NUMBER_FORMAT;
 import static bridge.constant.OutputMessage.ENTER_BRIDGE_SIZE;
+import static bridge.constant.OutputMessage.ENTER_MOVING_SIGN;
 
 import bridge.constant.OutputMessage;
 import camp.nextstep.edu.missionutils.Console;
 
-/**
- * 사용자로부터 입력을 받는 역할을 한다.
- */
 public class InputView {
 
-    /**
-     * 다리의 길이를 입력받는다.
-     */
     public int readBridgeSize() {
         printOutputMessage(ENTER_BRIDGE_SIZE);
         String input = Console.readLine();
+        System.out.println();
         return parseInt(input);
     }
 
-    /**
-     * 사용자가 이동할 칸을 입력받는다.
-     */
     public String readMoving() {
-        return null;
+        printOutputMessage(ENTER_MOVING_SIGN);
+        return Console.readLine();
     }
 
     /**
