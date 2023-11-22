@@ -2,6 +2,7 @@ package bridge.view;
 
 import static bridge.constant.ExceptionMessage.INVALID_NUMBER_FORMAT;
 import static bridge.constant.OutputMessage.ENTER_BRIDGE_SIZE;
+import static bridge.constant.OutputMessage.ENTER_GAME_COMMAND;
 import static bridge.constant.OutputMessage.ENTER_MOVING_SIGN;
 
 import bridge.constant.OutputMessage;
@@ -21,11 +22,9 @@ public class InputView {
         return Console.readLine();
     }
 
-    /**
-     * 사용자가 게임을 다시 시도할지 종료할지 여부를 입력받는다.
-     */
     public String readGameCommand() {
-        return null;
+        printOutputMessage(ENTER_GAME_COMMAND);
+        return Console.readLine();
     }
 
     private int parseInt(String value) {

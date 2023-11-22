@@ -5,6 +5,8 @@ import bridge.model.Bridge;
 import bridge.model.BridgeGame;
 import bridge.model.BridgeMaker;
 import bridge.model.BridgeSize;
+import bridge.model.GameCommand;
+import bridge.model.GameResult;
 import bridge.model.MovingSign;
 import bridge.view.InputView;
 import bridge.view.OutputView;
@@ -29,7 +31,20 @@ public class BridgeGameController {
             MovingSign movingSign = new MovingSign(inputView.readMoving());
             bridgeGame.move(count, movingSign);
             outputView.printMap(bridgeGame);
+            if (!bridgeGame.isBridgeValidSign(count, movingSign)) {
+                GameCommand gameCommand = new GameCommand(inputView.readGameCommand());
+                if (gameCommand.isGameEnd()) {
+                    GameResult gameResult = new GameResult(bridgeGame.isGameSuccess(bridgeSize), count);
+                    outputView.printResult(gameResult, bridgeGame);
+                    return;
+                }
+                bridgeGame.retry();
+                count = 0;
+                continue;
+            }
             count++;
         }
+        GameResult gameResult = new GameResult(bridgeGame.isGameSuccess(bridgeSize), count);
+        outputView.printResult(gameResult, bridgeGame);
     }
 }
